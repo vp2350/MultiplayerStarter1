@@ -36,139 +36,139 @@ public class AudioManager : Singleton<AudioManager>
 
     private void Update()
     {
-        switch(currentState)
-        {
-            case AudioState.Stealth:
-                UpdateStealth();
-                if (!(stealth.enabled && stealth.isPlaying))
-                {
-                    combat.enabled = false;
-                    combat.volume = 0f;
-                    combatEnd.enabled = false;
-                    combatEnd.volume = 0f;
-                    stealth.enabled = true;
-                    stealth.Play();
-
-                    currentBeatStealth = 0f;
-                    currentMeasureStealth = 0f;
-                    currentDeltaStealth = 0f;
-                }
-
-                stealth.volume = musicVolume;
-
-                currentBeatCombat = 0f;
-                currentBeatCombatEnd = 0f;
-
-                currentMeasureCombat = 0f;
-                currentMeasureCombatEnd = 0f;
-
-                currentDeltaCombat = 0f;
-                currentDeltaCombatEnd = 0f;
-
-                break;
-            case AudioState.StealthToCombat:
-                UpdateStealth();
-
-                if(currentBeatStealth == 3 || currentBeatStealth == 1)
-                {
-                    currentBeatStealth = 3; // keep the track playing until it's faded out
-
-                    if (stealth.enabled)
-                    {
-                        if (Crossfade(stealth, combat))
-                            currentState = AudioState.Combat;
-                        UpdateCombat();
-                    }
-                    else
-                    {
-                        if (Crossfade(combatEnd, combat))
-                            currentState = AudioState.Combat;
-                        UpdateCombat();
-                    }
-                }
-                break;
-            case AudioState.Combat:
-                UpdateCombat();
-                if (!(combat.enabled && combat.isPlaying))
-                {
-                    stealth.enabled = false;
-                    stealth.volume = 0f;
-                    combatEnd.enabled = false;
-                    combatEnd.volume = 0f;
-                    combat.enabled = true;
-                    combat.Play();
-
-                    currentBeatCombat = 0f;
-                    currentMeasureCombat = 0f;
-                    currentDeltaCombat = 0f;
-                }
-
-                combat.volume = musicVolume;
-
-                currentBeatStealth = 0f;
-                currentBeatCombatEnd = 0f;
-
-                currentMeasureStealth = 0f;
-                currentMeasureCombatEnd = 0f;
-
-                currentDeltaStealth = 0f;
-                currentDeltaCombatEnd = 0f;
-                break;
-            case AudioState.CombatToCombatEnd:
-                UpdateCombat();
-                if (currentBeatCombat == 0)
-                {
-                    currentBeatCombat = 0; // keep the track playing until it's faded out
-                    if (Crossfade(combat, combatEnd))
-                        currentState = AudioState.CombatEnd;
-                    UpdateCombatEnd();
-                }
-                break;
-            case AudioState.CombatEnd:
-                if (!(combatEnd.enabled && combatEnd.isPlaying))
-                {
-                    combat.enabled = false;
-                    combat.volume = 0f;
-                    stealth.enabled = false;
-                    stealth.volume = 0f;
-                    combatEnd.enabled = true;
-                    combatEnd.Play();
-
-                    currentBeatCombatEnd = 0f;
-                    currentMeasureCombatEnd = 0f;
-                    currentDeltaCombatEnd = 0f;
-                }
-
-
-                UpdateCombatEnd();
-
-                combatEnd.volume = musicVolume;
-
-                if (currentMeasureCombatEnd == 1) // switch back on measure 2
-                    currentState = AudioState.CombatEndToStealth;
-
-                currentBeatStealth = 0f;
-                currentBeatCombat = 0f;
-
-                currentMeasureStealth = 0f;
-                currentMeasureCombat = 0f;
-
-                currentDeltaStealth = 0f;
-                currentDeltaCombat = 0f;
-                break;
-            case AudioState.CombatEndToStealth:
-                UpdateCombatEnd();
-
-                if (currentBeatCombatEnd == 3 && currentMeasureCombatEnd == 1)
-                {
-                    currentBeatCombatEnd = 3; // keep the track playing until it's faded out
-                    currentDeltaCombatEnd = 0;
-                    if (Crossfade(combatEnd, stealth))
-                        currentState = AudioState.Stealth;
-                    UpdateStealth();
-                }
-                break;
-        }
+        //switch(currentState)
+        //{
+        //    case AudioState.Stealth:
+        //        UpdateStealth();
+        //        if (!(stealth.enabled && stealth.isPlaying))
+        //        {
+        //            combat.enabled = false;
+        //            combat.volume = 0f;
+        //            combatEnd.enabled = false;
+        //            combatEnd.volume = 0f;
+        //            stealth.enabled = true;
+        //            stealth.Play();
+        //
+        //            currentBeatStealth = 0f;
+        //            currentMeasureStealth = 0f;
+        //            currentDeltaStealth = 0f;
+        //        }
+        //
+        //        stealth.volume = musicVolume;
+        //
+        //        currentBeatCombat = 0f;
+        //        currentBeatCombatEnd = 0f;
+        //
+        //        currentMeasureCombat = 0f;
+        //        currentMeasureCombatEnd = 0f;
+        //
+        //        currentDeltaCombat = 0f;
+        //        currentDeltaCombatEnd = 0f;
+        //
+        //        break;
+        //    case AudioState.StealthToCombat:
+        //        UpdateStealth();
+        //
+        //        if(currentBeatStealth == 3 || currentBeatStealth == 1)
+        //        {
+        //            currentBeatStealth = 3; // keep the track playing until it's faded out
+        //
+        //            if (stealth.enabled)
+        //            {
+        //                if (Crossfade(stealth, combat))
+        //                    currentState = AudioState.Combat;
+        //                UpdateCombat();
+        //            }
+        //            else
+        //            {
+        //                if (Crossfade(combatEnd, combat))
+        //                    currentState = AudioState.Combat;
+        //                UpdateCombat();
+        //            }
+        //        }
+        //        break;
+        //    case AudioState.Combat:
+        //        UpdateCombat();
+        //        if (!(combat.enabled && combat.isPlaying))
+        //        {
+        //            stealth.enabled = false;
+        //            stealth.volume = 0f;
+        //            combatEnd.enabled = false;
+        //            combatEnd.volume = 0f;
+        //            combat.enabled = true;
+        //            combat.Play();
+        //
+        //            currentBeatCombat = 0f;
+        //            currentMeasureCombat = 0f;
+        //            currentDeltaCombat = 0f;
+        //        }
+        //
+        //        combat.volume = musicVolume;
+        //
+        //        currentBeatStealth = 0f;
+        //        currentBeatCombatEnd = 0f;
+        //
+        //        currentMeasureStealth = 0f;
+        //        currentMeasureCombatEnd = 0f;
+        //
+        //        currentDeltaStealth = 0f;
+        //        currentDeltaCombatEnd = 0f;
+        //        break;
+        //    case AudioState.CombatToCombatEnd:
+        //        UpdateCombat();
+        //        if (currentBeatCombat == 0)
+        //        {
+        //            currentBeatCombat = 0; // keep the track playing until it's faded out
+        //            if (Crossfade(combat, combatEnd))
+        //                currentState = AudioState.CombatEnd;
+        //            UpdateCombatEnd();
+        //        }
+        //        break;
+        //    case AudioState.CombatEnd:
+        //        if (!(combatEnd.enabled && combatEnd.isPlaying))
+        //        {
+        //            combat.enabled = false;
+        //            combat.volume = 0f;
+        //            stealth.enabled = false;
+        //            stealth.volume = 0f;
+        //            combatEnd.enabled = true;
+        //            combatEnd.Play();
+        //
+        //            currentBeatCombatEnd = 0f;
+        //            currentMeasureCombatEnd = 0f;
+        //            currentDeltaCombatEnd = 0f;
+        //        }
+        //
+        //
+        //        UpdateCombatEnd();
+        //
+        //        combatEnd.volume = musicVolume;
+        //
+        //        if (currentMeasureCombatEnd == 1) // switch back on measure 2
+        //            currentState = AudioState.CombatEndToStealth;
+        //
+        //        currentBeatStealth = 0f;
+        //        currentBeatCombat = 0f;
+        //
+        //        currentMeasureStealth = 0f;
+        //        currentMeasureCombat = 0f;
+        //
+        //        currentDeltaStealth = 0f;
+        //        currentDeltaCombat = 0f;
+        //        break;
+        //    case AudioState.CombatEndToStealth:
+        //        UpdateCombatEnd();
+        //
+        //        if (currentBeatCombatEnd == 3 && currentMeasureCombatEnd == 1)
+        //        {
+        //            currentBeatCombatEnd = 3; // keep the track playing until it's faded out
+        //            currentDeltaCombatEnd = 0;
+        //            if (Crossfade(combatEnd, stealth))
+        //                currentState = AudioState.Stealth;
+        //            UpdateStealth();
+        //        }
+        //        break;
+        //}
     }
 
     /// <summary>

@@ -25,6 +25,7 @@ public class BulletScript : MonoBehaviour
 		direction = new Vector2(dir.x,dir.y).normalized;
 		transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90);
 		fromPlayer = FromPlayer;
+
 	}
 
 	public void FixedUpdate()
@@ -59,11 +60,11 @@ public class BulletScript : MonoBehaviour
 				Destroy(gameObject);
 				break;
 			case "Player":
-				if(!fromPlayer)
+				if(fromPlayer)
                 {
 					other.gameObject.GetComponent<PlayerStats>().TakeDamage((int)damage);
 					SpawnSplat();
-					Destroy(gameObject);
+					//Destroy(gameObject);
 
 				}
 

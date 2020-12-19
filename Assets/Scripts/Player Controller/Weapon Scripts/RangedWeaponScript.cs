@@ -31,7 +31,7 @@ public class RangedWeaponScript : MonoBehaviour
             muzzleFlash.SetActive(true);
 
             BulletScript Temp = Instantiate(projectile).GetComponent<BulletScript>();
-            Temp.transform.position = transform.position;
+            Temp.transform.position = transform.position + (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized*1.5f;
             if (Temp != null)
             {
                 Temp.Initialize(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position, projectileSpeed, true);
