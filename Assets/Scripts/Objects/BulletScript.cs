@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
@@ -11,7 +12,7 @@ public class BulletScript : MonoBehaviour
 	[SerializeField] float damage = 1f;
 	bool fromPlayer;
 	[SerializeField] GameObject bloodSplatter;
-
+	GameObject shooter;
 
 	private void Start()
 	{
@@ -19,13 +20,13 @@ public class BulletScript : MonoBehaviour
 		Destroy(gameObject, timeDuration); //destroy this after the duration
 	}
 
-	public void Initialize(Vector3 dir, float Speed, bool FromPlayer)
+	public void Initialize(Vector3 dir, float Speed, bool FromPlayer, GameObject Shooter)
 	{
 		speed = Speed;
-		direction = new Vector2(dir.x,dir.y).normalized;
+		direction = (new Vector2(dir.x,dir.y).normalized)*2;
 		transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90);
 		fromPlayer = FromPlayer;
-
+		shooter = Shooter;
 	}
 
 	public void FixedUpdate()
@@ -52,15 +53,15 @@ public class BulletScript : MonoBehaviour
 		{
 			case "Damageable":
 				// Do damage to other object then destroy this bullet
-				Destroy(gameObject); 
+				PhotonNetwork.Destroy(gameObject); 
 				break;
 			case "Breakable":
 				// Break the other object then destroy this bullet
 				other.gameObject.GetComponent<BreakableObjectScript>().GetHit(damage);
-				Destroy(gameObject);
+				PhotonNetwork.Destroy(gameObject);
 				break;
 			case "Player":
-				if(fromPlayer)
+				if(fromPlayer && this.gameObject != shooter)
                 {
 					other.gameObject.GetComponent<PlayerStats>().TakeDamage((int)damage);
 					SpawnSplat();
@@ -75,7 +76,7 @@ public class BulletScript : MonoBehaviour
 					// DO damage to enemy
 					other.gameObject.GetComponent<BreakableObjectScript>().GetHit(1f);
 					SpawnSplat();
-					Destroy(gameObject);
+					PhotonNetwork.Destroy(gameObject);
 				}
 				break;
 			case "Bullet":
@@ -83,7 +84,7 @@ public class BulletScript : MonoBehaviour
 				break;
 			case "Wall":
 				// Destroy this bullet
-				Destroy(gameObject);
+				PhotonNetwork.Destroy(gameObject);
 				break;
 			default:
 				// Do nothing

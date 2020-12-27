@@ -38,7 +38,7 @@ public class EnemyWeaponScript : MonoBehaviour
         Temp.transform.position = transform.position;
         if (Temp != null)
         {
-            Temp.Initialize(PlayerInfo.Instance.playerPos.position - transform.position, projectileSpeed, false);
+            Temp.Initialize(PlayerInfo.Instance.playerPos.position - transform.position, projectileSpeed, false, this.gameObject);
             GetComponent<AudioSource>().PlayOneShot(soundEffect, AudioManager.Instance.sfxVolume);
         }
         timeToShoot = shotTimer;

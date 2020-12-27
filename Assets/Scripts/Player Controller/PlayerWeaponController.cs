@@ -13,11 +13,11 @@ public class PlayerWeaponController : MonoBehaviour
 
     void Start()
     {
-        PV = GetComponent<PhotonView>();
+        PV = this.transform.parent.GetComponent<PhotonView>();
     }
     void Update()
     {
-        if (PV.IsMine)
+        if (this.transform.parent.GetComponent<PhotonView>().IsMine)
         {
             if (muzzleTimer > 0)
             {

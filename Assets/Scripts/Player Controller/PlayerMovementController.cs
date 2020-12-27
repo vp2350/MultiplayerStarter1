@@ -13,20 +13,36 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField][Range(5,50)] float maxWalkSpeed = 1.5f;
     [SerializeField] bool accelerationEnabled = true;
     [SerializeField] [Range(1, 200)] float accelerationpercent = 110f;
+    GameObject camera1Obj;
+    Camera camera1;
+    [SerializeField] GameObject lightMask;
+    [SerializeField] GameObject lightMask1;
+    [SerializeField] GameObject lightMask2;
+
+
     float acceleration, speed;
     Vector2 move;
 
     private PhotonView PV;
     void Start()
     {
-        PV = GetComponent<PhotonView>();
+        PV = this.transform.parent.GetComponent<PhotonView>();
+        camera1Obj = (this.transform.parent).gameObject;
+        camera1 = camera1Obj.transform.Find("Camera").GetComponent<Camera>();
+        if(!PV.IsMine)
+        {
+            camera1Obj.transform.Find("Camera").gameObject.SetActive(false);
+            lightMask.SetActive(false);
+            lightMask1.SetActive(false);
+            lightMask2.SetActive(false);
+        }
         acceleration = (accelerationpercent / 100f) * maxWalkSpeed;
         GetComponents();
     }
 
     void Update()
     {
-        if (PV.IsMine)
+        if (this.transform.parent.GetComponent<PhotonView>().IsMine)
         {
             RotateSprite();
             UpdateMoveControls();
@@ -41,9 +57,9 @@ public class PlayerMovementController : MonoBehaviour
     #region updates
     void RotateSprite()
     {
-        // Player can control direction
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //get mouse position
 
+        // Player can control direction
+        Vector3 mousePos = camera1.ScreenToWorldPoint(Input.mousePosition); //get mouse position
         Vector3 direction = transform.position - mousePos; //get vector from position to mouse pos
         float angleOfRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90; //get angle
         transform.localRotation = Quaternion.Euler(0, 0, angleOfRotation); //set rotation

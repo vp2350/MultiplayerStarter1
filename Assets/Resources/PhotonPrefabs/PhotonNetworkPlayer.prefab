@@ -66,5 +66,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cd876267dfafe748ac111e59221554b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myAvatar: {fileID: 2411030245816434730, guid: 94da0406078fb114f965763d85cba92c,
-    type: 3}
+  myAvatar: {fileID: 209103607491996178, guid: 7ad403d9aa88e1f41bb7e6ffccf7f37d, type: 3}
